@@ -1,0 +1,13 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection_": "Server=localhost,1433;;Database=SchoolAppDb;Trusted_Connection=True;TrustServerCertificate=True",
+    "DefaultConnection": "Server=localhost,1433;Database=SchoolAppDb;User ID=sa;Password=YourStrong!Passw0rd;Encrypt=False;TrustServerCertificate=True"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
