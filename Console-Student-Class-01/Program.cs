@@ -1,4 +1,9 @@
-﻿namespace Console_Student_Class_01
+﻿using DAL.Data;
+using DAL.Models;
+using Microsoft.Extensions.Configuration;
+using System.Net.WebSockets;
+
+namespace Console_Student_Class_01
 {
     internal class Program
     {
@@ -12,8 +17,8 @@
             Console.WriteLine("Enter student name:");
             string studentName = Console.ReadLine();
 
-            //Console.WriteLine("Enter student surname:");
-            //string studentSurname = Console.ReadLine();
+            //Console.WriteLine("Enter student surename:");
+            //string studentSurename = Console.ReadLine();
 
             //Console.WriteLine("Enter student email:");
             //string studentEmail = Console.ReadLine();
@@ -22,11 +27,12 @@
 
             student.StudentID = studentId;
             student.StudentName = studentName;
-            //student.StudentSurname = studentSurname;
+            //student.StudentSurename = studentSurename;
             //student.StudentEmail = studentEmail;
 
             Console.WriteLine("Registered Student Information:");
-            Console.WriteLine($"Student ID = {student.StudentID} Student Name = {student.StudentName} Student Surname = {student.StudentSurname} Student Email = {student.StudentEmail}");
+            Console.WriteLine($"Student ID = {student.StudentID} Student Name = {student.StudentName} " +
+                $"Student Surename = {student.StudentSurename} Student Email = {student.StudentEmail}");
 
             return student;
 
@@ -37,7 +43,8 @@
             Console.WriteLine("Student List");
             foreach (var item in studentList)
             {
-                Console.WriteLine($"Student ID = {item.StudentID} Student Name = {item.StudentName} Student Surname = {item.StudentSurname} Student Email = {item.StudentEmail}");
+                Console.WriteLine($"Student ID = {item.StudentID} Student Name = {item.StudentName} " +
+                    $"Student Surename = {item.StudentSurename} Student Email = {item.StudentEmail}");
             }
         }
 
@@ -48,7 +55,9 @@
             Student foundStudent = studentList.FirstOrDefault(s => s.StudentID == studentId);
             if (foundStudent != null)
             {
-                Console.WriteLine($"Student found: ID = {foundStudent.StudentID}, Name = {foundStudent.StudentName}, Surname = {foundStudent.StudentSurname}, Email = {foundStudent.StudentEmail}");
+                Console.WriteLine($"Student found: ID = {foundStudent.StudentID}, " +
+                    $"Name = {foundStudent.StudentName}, Surename = {foundStudent.StudentSurename}, " +
+                    $"Email = {foundStudent.StudentEmail}");
             }
             else
             {
@@ -57,71 +66,19 @@
                 
         }
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Course course = new Course();
-            course.CourseID = 1;
-            course.CourseName = "Mathematics";
-            course.CourseCode = "MATH101";
-            course.CourseCredit = 3;
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-            Course course1 = new Course();
-            course1.CourseID = 2;
-            course1.CourseName = "Physics";
-            course1.CourseCode = "PHYS101";
-            course1.CourseCredit = 4;
+            var studentRepository = new StudentRepository(configuration);
 
-            Course course2 = new Course();
-            course2.CourseID = 3;
-            course2.CourseName = "Chemistry";
-            course2.CourseCode = "CHEM101";
-            course2.CourseCredit = 3;
+            var studentService = new StudentService(studentRepository);
 
             List<Course> courseList = new List<Course>();
             List<Student> studentList = new List<Student>();
-
-            // Console.WriteLine("Course count: " + (courseList.Count() > 0 ? courseList.Count() : "0"));
-            Console.WriteLine($"Course count: {courseList?.Count ?? 0}");
-            Console.ReadLine();
-
-            courseList.Add(course);
-            courseList.Add(course1);
-            courseList.Add(course2);
-
-            //Console.WriteLine("Course count: " + (courseList.Count() > 0 ? courseList.Count() : "0"));
-            Console.WriteLine($"Course count: {courseList?.Count ?? 0}");
-
-            foreach (var item in courseList)
-            {
-                Console.WriteLine($"Course ID = {item.CourseID} Course Name = {item.CourseName} Course Code = {item.CourseCode} Course Credit = {item.CourseCredit}");
-            }
-
-            //for (int i = 0; i < courseList.Count; i++)
-            //{
-            //    Console.WriteLine($"Course ID = {courseList[i].CourseID} Course Name = {courseList[i].CourseName} Course Code = {courseList[i].CourseCode} Course Credit = {courseList[i].CourseCredit}");
-            //}
-
-            //Student student = RegisterStudents();
-
-            ////Console.WriteLine("Student Information:");
-            ////Console.WriteLine($"Student ID = {student.StudentID} Student Name = {student.StudentName} Student Surname = {student.StudentSurname} Student Email = {student.StudentEmail}");
-
-            //studentList.Add(student);
-
-            //student = RegisterStudents();
-
-            //studentList.Add(student);
-
-            //Console.ReadLine();
-
-            //Console.WriteLine("Student List");
-
-            //foreach (var item in studentList)
-            //{
-            //    Console.WriteLine($"Student ID = {item.StudentID} Student Name = {item.StudentName} Student Surname = {item.StudentSurname} Student Email = {item.StudentEmail}");
-            //}
-
-            //Student student = RegisterStudents();
 
             Student student = new Student();
 
@@ -142,7 +99,9 @@
                 }
                 else if (answer == "2")
                 {
-                    ListStudents(studentList);
+                    //ListStudents(studentList);
+                    
+                    studentService.DisplayStudetnListAsync().Wait();
                 }
                 else if (answer == "3")
                 {
@@ -157,8 +116,6 @@
                     Console.WriteLine("Invalid input. Please try again.");
                 }
             }
-
-            Console.ReadLine();
         }
     }
 }

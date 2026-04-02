@@ -1,21 +1,54 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using DAL.Models;
+using DAL.Data.Interfaces;
 
 namespace DAL.Data
 {
-    public class StudentRepository
+    public class StudentRepository : IStudentRepository
     {
         private readonly string _connectionString;
 
         public StudentRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection") 
-                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found");
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' " +
+                "was not found");
+        }
+
+        public async Task<IReadOnlyList<Models.Student>> GetAllAsync()
+        {
+            var students = new List<Student>();
+            const string sql = """
+                           SELECT StudentID, StudentName, StudentSurename, StudentEmail
+                           FROM dbo.Students
+                           Order By StudentName ASC;
+                           """;
+
+            await using var connection = new SqlConnection(_connectionString);
+            await using var command = new SqlCommand(sql, connection);
+            await connection.OpenAsync();
+            await using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                var student = new Student
+                {
+                    StudentID = reader.GetInt32(reader.GetOrdinal("StudentID")),
+                    StudentName = reader.GetString(reader.GetOrdinal("StudentName")),
+                    StudentSurename = reader.GetString(reader.GetOrdinal("StudentSurename")),
+                    StudentEmail = reader.GetString(reader.GetOrdinal("StudentEmail"))
+                };
+                students.Add(student);
+            }
+
+            return students;
         }
 
     }
