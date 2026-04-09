@@ -8,36 +8,6 @@ namespace Console_Student_Class_01
     internal class Program
     {
 
-        public static Student RegisterStudents()
-        {
-
-            Console.WriteLine("Enter student Id:");
-            int studentId = Convert.ToInt32(Console.ReadLine());
-
-            Console.WriteLine("Enter student name:");
-            string studentName = Console.ReadLine();
-
-            //Console.WriteLine("Enter student surename:");
-            //string studentSurename = Console.ReadLine();
-
-            //Console.WriteLine("Enter student email:");
-            //string studentEmail = Console.ReadLine();
-
-            Student student = new Student();
-
-            student.StudentID = studentId;
-            student.StudentName = studentName;
-            //student.StudentSurename = studentSurename;
-            //student.StudentEmail = studentEmail;
-
-            Console.WriteLine("Registered Student Information:");
-            Console.WriteLine($"Student ID = {student.StudentID} Student Name = {student.StudentName} " +
-                $"Student Surename = {student.StudentSurename} Student Email = {student.StudentEmail}");
-
-            return student;
-
-        }
-
         public static void ListStudents(List<Student> studentList)
         {
             Console.WriteLine("Student List");
@@ -88,26 +58,46 @@ namespace Console_Student_Class_01
             {
                 Console.WriteLine("Student Registration System");
                 Console.WriteLine("1 - Do you want to add a new student");
-                Console.WriteLine("2 - Display All Students");
-                Console.WriteLine("3 - Find Student");
-                Console.WriteLine("4 - Exit");
+                Console.WriteLine("2 - Display All Students By ID");
+                Console.WriteLine("3 - Display All Students By Name");
+                Console.WriteLine("4 - Edit Student Details By Id");
+                Console.WriteLine("5 - Find Student");
+                Console.WriteLine("6 - Delete Student");
+                Console.WriteLine("7 - Exit");
                 string answer = Console.ReadLine();
                 if (answer == "1")
                 {
-                    student = RegisterStudents();
-                    studentList.Add(student);
+                    // student = RegisterStudents();
+                    student = StudentService.RegisterStudents();
+
+                    // studentList.Add(student);
+                    studentService.CreateStudentAsync(student).Wait();
                 }
                 else if (answer == "2")
                 {
-                    //ListStudents(studentList);
-                    
-                    studentService.DisplayStudetnListAsync().Wait();
+                    Console.WriteLine("\n\nDisplaying all students...\n");
+                    studentService.DisplayStudetnListByIDAsync().Wait();
                 }
                 else if (answer == "3")
                 {
-                    FindStudent(studentList);
+                    //ListStudents(studentList);
+                    Console.WriteLine("\n\nDisplaying all students...\n");
+                    studentService.DisplayStudetnListByNameAsync().Wait();
                 }
                 else if (answer == "4")
+                {
+                    studentService.UpdateStudentAsync(student).Wait();
+                }
+                else if (answer == "5")
+                {
+                    FindStudent(studentList);
+                }
+                else if (answer == "6")
+                {
+                    studentService.DeleteStudentAsync(student.StudentID).Wait();
+
+                }
+                else if (answer == "7")
                 {
                     exit = true;
                 }
