@@ -60,10 +60,12 @@ namespace Console_Student_Class_01
                 Console.WriteLine("1 - Do you want to add a new student");
                 Console.WriteLine("2 - Display All Students By ID");
                 Console.WriteLine("3 - Display All Students By Name");
-                Console.WriteLine("4 - Edit Student Details By Id");
-                Console.WriteLine("5 - Find Student");
-                Console.WriteLine("6 - Delete Student");
-                Console.WriteLine("7 - Exit");
+                Console.WriteLine("4 - Edit Student Details By ID");
+                Console.WriteLine("5 - Find Student By ID");
+                Console.WriteLine("6 - Find Student By Name");
+                Console.WriteLine("7 - Find Student By Email");
+                Console.WriteLine("8 - Delete Student");
+                Console.WriteLine("9 - Exit");
                 string answer = Console.ReadLine();
                 if (answer == "1")
                 {
@@ -90,14 +92,23 @@ namespace Console_Student_Class_01
                 }
                 else if (answer == "5")
                 {
-                    FindStudent(studentList);
+                    //FindStudent(studentList);
+                    studentService.GetStudentByIdAsync(student.StudentID).Wait();
                 }
                 else if (answer == "6")
+                {
+                    studentService.GetStudentByNameAsync(student.StudentName).Wait();
+                }
+                else if (answer == "7")
+                {
+                    studentService.GetStudentByEmailAsync(student.StudentEmail).Wait();
+                }
+                else if (answer == "8")
                 {
                     studentService.DeleteStudentAsync(student.StudentID).Wait();
 
                 }
-                else if (answer == "7")
+                else if (answer == "9")
                 {
                     exit = true;
                 }

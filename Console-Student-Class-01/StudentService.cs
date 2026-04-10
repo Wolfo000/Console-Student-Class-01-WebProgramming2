@@ -58,7 +58,7 @@ namespace Console_Student_Class_01
             int newStudentId = await _studentRepository.CreateAsync(student);
             Console.WriteLine($"New student created with ID: {newStudentId}");
             //Console.WriteLine("New student created with ID: " + newStudentId);
-            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("--------------------------------------------\n");
         }
 
         public static Student RegisterStudents()
@@ -90,12 +90,12 @@ namespace Console_Student_Class_01
             {
                 await _studentRepository.DeleteAsync(studentId);
                 Console.WriteLine($"Student with ID {studentId} has been deleted.");
-                Console.WriteLine("--------------------------------------------");
+                Console.WriteLine("--------------------------------------------\n");
             }
             else
             {
                 Console.WriteLine("Deletion cancelled.");
-                Console.WriteLine("--------------------------------------------");
+                Console.WriteLine("--------------------------------------------\n");
             }
         }
 
@@ -117,7 +117,73 @@ namespace Console_Student_Class_01
 
             await _studentRepository.UpdateAsync(student);
             Console.WriteLine($"Student with ID {student.StudentID} and name {student.StudentName} has been updated.");
-            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine("--------------------------------------------\n");
+        }
+
+        public async Task GetStudentByIdAsync(int id)
+        {
+            Console.WriteLine("Enter Student ID to find: ");
+            int studentId = Convert.ToInt32(Console.ReadLine());
+            var student = await _studentRepository.GetByIdAsync(studentId);
+
+            if (student != null)
+            {
+                Console.WriteLine("\n\nStudent found: ");
+                Console.WriteLine("Student ID: " + student.StudentID);
+                Console.WriteLine("Student Name: " + student.StudentName);
+                Console.WriteLine("Student Surename: " + student.StudentSurename);
+                Console.WriteLine("Student Email: " + student.StudentEmail);
+                Console.WriteLine("--------------------------------------------\n");
+            }
+            else
+            {
+                Console.WriteLine($"\nNo student found with ID {studentId}.");
+                Console.WriteLine("--------------------------------------------\n");
+            }
+        }
+
+        public async Task GetStudentByNameAsync(string name)
+        {
+            Console.WriteLine("Enter Student Name to find: ");
+            string studentName = Console.ReadLine();
+            var student = await _studentRepository.GetByNameAsync(studentName);
+
+            if (student != null)
+            {
+                Console.WriteLine("\n\nStudent found: ");
+                Console.WriteLine("Student ID: " + student.StudentID);
+                Console.WriteLine("Student Name: " + student.StudentName);
+                Console.WriteLine("Student Surename: " + student.StudentSurename);
+                Console.WriteLine("Student Email: " + student.StudentEmail);
+                Console.WriteLine("--------------------------------------------\n");
+            }
+            else
+            {
+                Console.WriteLine($"\nNo student found with Name {studentName}.");
+                Console.WriteLine("--------------------------------------------\n");
+            }
+        }
+
+        public async Task GetStudentByEmailAsync(string email)
+        {
+            Console.WriteLine("Enter Student Email to find: ");
+            string studentEmail = Console.ReadLine();
+            var student = await _studentRepository.GetByEmailAsync(studentEmail);
+
+            if (student != null)
+            {
+                Console.WriteLine("\n\nStudent found: ");
+                Console.WriteLine("Student ID: " + student.StudentID);
+                Console.WriteLine("Student Name: " + student.StudentName);
+                Console.WriteLine("Student Surename: " + student.StudentSurename);
+                Console.WriteLine("Student Email: " + student.StudentEmail);
+                Console.WriteLine("--------------------------------------------\n");
+            }
+            else
+            {
+                Console.WriteLine($"\nNo student found with Email {studentEmail}.");
+                Console.WriteLine("--------------------------------------------\n");
+            }
         }
     }
 }

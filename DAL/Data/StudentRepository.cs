@@ -124,5 +124,83 @@ namespace DAL.Data
             await connection.OpenAsync();
             await command.ExecuteNonQueryAsync();
         }
+
+        public async Task<Student> GetByIdAsync(int id)
+        {
+            const string sql = "SELECT * FROM dbo.Students WHERE StudentID = @StudentID;";
+
+            var student = new Student();
+
+            await using var connection = new SqlConnection(_connectionString);
+            await using var command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@StudentID", id);
+            await connection.OpenAsync();
+            await using var reader = await command.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                student = new Student
+                {
+                    StudentID = reader.GetInt32(reader.GetOrdinal("StudentID")),
+                    StudentName = reader.GetString(reader.GetOrdinal("StudentName")),
+                    StudentSurename = reader.GetString(reader.GetOrdinal("StudentSurename")),
+                    StudentEmail = reader.GetString(reader.GetOrdinal("StudentEmail"))
+                };
+            }
+
+            return student;
+        }
+
+        public async Task<Student> GetByNameAsync(string name)
+        {
+            const string sql = "SELECT * FROM dbo.Students WHERE StudentName = @StudentName;";
+
+            var student = new Student();
+
+            await using var connection = new SqlConnection(_connectionString);
+            await using var command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@StudentName", name);
+            await connection.OpenAsync();
+            await using var reader = await command.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                student = new Student
+                {
+                    StudentID = reader.GetInt32(reader.GetOrdinal("StudentID")),
+                    StudentName = reader.GetString(reader.GetOrdinal("StudentName")),
+                    StudentSurename = reader.GetString(reader.GetOrdinal("StudentSurename")),
+                    StudentEmail = reader.GetString(reader.GetOrdinal("StudentEmail"))
+                };
+            }
+
+            return student;
+        }
+
+        public async Task<Student> GetByEmailAsync(string email)
+        {
+            const string sql = "SELECT * FROM dbo.Students WHERE StudentEmail = @StudentEmail;";
+
+            var student = new Student();
+
+            await using var connection = new SqlConnection(_connectionString);
+            await using var command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@StudentEmail", email);
+            await connection.OpenAsync();
+            await using var reader = await command.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                student = new Student
+                {
+                    StudentID = reader.GetInt32(reader.GetOrdinal("StudentID")),
+                    StudentName = reader.GetString(reader.GetOrdinal("StudentName")),
+                    StudentSurename = reader.GetString(reader.GetOrdinal("StudentSurename")),
+                    StudentEmail = reader.GetString(reader.GetOrdinal("StudentEmail"))
+                };
+            }
+
+            return student;
+        }
     }
 }
