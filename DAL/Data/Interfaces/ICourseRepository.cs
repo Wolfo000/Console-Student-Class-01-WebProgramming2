@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Data.Interfaces
 {
-    public interface ICourseRepository
+    public interface ICourseRepository : IRepository<Course>
     {
         Task<IReadOnlyList<Course>> GetAllAsync();
         Task<Course?> GetByIdAsync(int id);

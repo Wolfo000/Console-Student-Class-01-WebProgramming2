@@ -8,7 +8,7 @@ using DAL.Models;
 
 namespace DAL.Data.Interfaces
 {
-    public interface IStudentRepository
+    public interface IStudentRepository : IRepository<Student>
     {
         Task<IReadOnlyList<DAL.Models.Student>> GetAllByNameAsync();
         Task<IReadOnlyList<Models.Student>> GetAllByIDAsync();

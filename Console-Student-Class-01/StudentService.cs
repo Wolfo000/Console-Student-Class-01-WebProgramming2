@@ -12,9 +12,9 @@ namespace Console_Student_Class_01
     public class StudentService
     {
 
-        private readonly IStudentRepository _studentRepository;
+        private readonly IRepository<Student> _studentRepository;
 
-        public StudentService(IStudentRepository studentRepository)
+        public StudentService(IRepository<Student> studentRepository)
         {
             _studentRepository = studentRepository;
         }
@@ -22,6 +22,7 @@ namespace Console_Student_Class_01
         public async Task DisplayStudetnListByNameAsync()
         {
             var students = await _studentRepository.GetAllByNameAsync();
+            Console.WriteLine("\n\nDisplaying all students ordered by name...\n");
 
             foreach (Student s in students)
             {
@@ -39,6 +40,7 @@ namespace Console_Student_Class_01
         public async Task DisplayStudetnListByIDAsync()
         {
             var students = await _studentRepository.GetAllByIDAsync();
+            Console.WriteLine("\n\nDisplaying all students ordered by ID...\n");
 
             foreach (Student s in students)
             {

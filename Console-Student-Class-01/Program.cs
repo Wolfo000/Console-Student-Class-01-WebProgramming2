@@ -7,35 +7,6 @@ namespace Console_Student_Class_01
 {
     internal class Program
     {
-
-        public static void ListStudents(List<Student> studentList)
-        {
-            Console.WriteLine("Student List");
-            foreach (var item in studentList)
-            {
-                Console.WriteLine($"Student ID = {item.StudentID} Student Name = {item.StudentName} " +
-                    $"Student Surename = {item.StudentSurename} Student Email = {item.StudentEmail}");
-            }
-        }
-
-        public static void FindStudent(List<Student> studentList)
-        {
-            Console.WriteLine("Enter student ID to find:");
-            int studentId = Convert.ToInt32(Console.ReadLine());
-            Student foundStudent = studentList.FirstOrDefault(s => s.StudentID == studentId);
-            if (foundStudent != null)
-            {
-                Console.WriteLine($"Student found: ID = {foundStudent.StudentID}, " +
-                    $"Name = {foundStudent.StudentName}, Surename = {foundStudent.StudentSurename}, " +
-                    $"Email = {foundStudent.StudentEmail}");
-            }
-            else
-            {
-                Console.WriteLine("Student not found.");
-            }
-                
-        }
-
         static async Task Main(string[] args)
         {
             var configuration = new ConfigurationBuilder()
@@ -77,13 +48,11 @@ namespace Console_Student_Class_01
                 }
                 else if (answer == "2")
                 {
-                    Console.WriteLine("\n\nDisplaying all students...\n");
                     studentService.DisplayStudetnListByIDAsync().Wait();
                 }
                 else if (answer == "3")
                 {
                     //ListStudents(studentList);
-                    Console.WriteLine("\n\nDisplaying all students...\n");
                     studentService.DisplayStudetnListByNameAsync().Wait();
                 }
                 else if (answer == "4")

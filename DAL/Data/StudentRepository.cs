@@ -11,7 +11,7 @@ using DAL.Data.Interfaces;
 
 namespace DAL.Data
 {
-    public class StudentRepository : IStudentRepository
+    public class StudentRepository : IRepository<Student>
     {
         private readonly string _connectionString;
 
@@ -129,8 +129,6 @@ namespace DAL.Data
         {
             const string sql = "SELECT * FROM dbo.Students WHERE StudentID = @StudentID;";
 
-            var student = new Student();
-
             await using var connection = new SqlConnection(_connectionString);
             await using var command = new SqlCommand(sql, connection);
             command.Parameters.AddWithValue("@StudentID", id);
@@ -139,7 +137,7 @@ namespace DAL.Data
 
             if (await reader.ReadAsync())
             {
-                student = new Student
+                return new Student
                 {
                     StudentID = reader.GetInt32(reader.GetOrdinal("StudentID")),
                     StudentName = reader.GetString(reader.GetOrdinal("StudentName")),
@@ -148,14 +146,12 @@ namespace DAL.Data
                 };
             }
 
-            return student;
+            return null;
         }
 
         public async Task<Student> GetByNameAsync(string name)
         {
             const string sql = "SELECT * FROM dbo.Students WHERE StudentName = @StudentName;";
-
-            var student = new Student();
 
             await using var connection = new SqlConnection(_connectionString);
             await using var command = new SqlCommand(sql, connection);
@@ -165,7 +161,7 @@ namespace DAL.Data
 
             if (await reader.ReadAsync())
             {
-                student = new Student
+                return new Student
                 {
                     StudentID = reader.GetInt32(reader.GetOrdinal("StudentID")),
                     StudentName = reader.GetString(reader.GetOrdinal("StudentName")),
@@ -174,14 +170,12 @@ namespace DAL.Data
                 };
             }
 
-            return student;
+            return null;
         }
 
         public async Task<Student> GetByEmailAsync(string email)
         {
             const string sql = "SELECT * FROM dbo.Students WHERE StudentEmail = @StudentEmail;";
-
-            var student = new Student();
 
             await using var connection = new SqlConnection(_connectionString);
             await using var command = new SqlCommand(sql, connection);
@@ -191,7 +185,7 @@ namespace DAL.Data
 
             if (await reader.ReadAsync())
             {
-                student = new Student
+                return new Student
                 {
                     StudentID = reader.GetInt32(reader.GetOrdinal("StudentID")),
                     StudentName = reader.GetString(reader.GetOrdinal("StudentName")),
@@ -200,7 +194,7 @@ namespace DAL.Data
                 };
             }
 
-            return student;
+            return null;
         }
     }
 }
